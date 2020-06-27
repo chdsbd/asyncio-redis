@@ -14,5 +14,4 @@ fi
 poetry run mypy .
 
 # lint
-poetry run flake8 kodiak
-poetry run pylint --rcfile='.pylintrc' kodiak
+poetry run flake8 asyncio_redis
