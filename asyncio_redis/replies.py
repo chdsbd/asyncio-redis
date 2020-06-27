@@ -1,17 +1,16 @@
 import asyncio
-from asyncio.tasks import gather
 
 __all__ = (
-    'BlockingPopReply',
-    'BlockingZPopReply',
-    'DictReply',
-    'ListReply',
-    'PubSubReply',
-    'SetReply',
-    'StatusReply',
-    'ZRangeReply',
-    'ConfigPairReply',
-    'InfoReply',
+    "BlockingPopReply",
+    "BlockingZPopReply",
+    "DictReply",
+    "ListReply",
+    "PubSubReply",
+    "SetReply",
+    "StatusReply",
+    "ZRangeReply",
+    "ConfigPairReply",
+    "InfoReply",
 )
 
 
@@ -26,11 +25,12 @@ class StatusReply:
     Wrapper for Redis status replies.
     (for messages like OK, QUEUED, etc...)
     """
+
     def __init__(self, status):
         self.status = status
 
     def __repr__(self):
-        return 'StatusReply(status=%r)' % self.status
+        return "StatusReply(status=%r)" % self.status
 
     def __eq__(self, other):
         return self.status == other.status
@@ -50,6 +50,7 @@ class DictReply:
             key, value = yield from f
             print(key, value)
     """
+
     def __init__(self, multibulk_reply):
         self._result = multibulk_reply
 
@@ -58,7 +59,7 @@ class DictReply:
 
     def __iter__(self):
         """ Yield a list of futures that yield { key: value } tuples. """
-        i = iter(self._result)
+        iter(self._result)
 
         @asyncio.coroutine
         def getter(f):
@@ -80,13 +81,14 @@ class DictReply:
         return dict(self._parse(k, v) for k, v in zip(data[::2], data[1::2]))
 
     def __repr__(self):
-        return '%s(length=%r)' % (self.__class__.__name__, int(self._result.count / 2))
+        return "%s(length=%r)" % (self.__class__.__name__, int(self._result.count / 2))
 
 
 class ZRangeReply(DictReply):
     """
     Container for a zrange query result.
     """
+
     def _parse(self, key, value):
         # Mapping { key: score_as_float }
         return key, float(value)
@@ -104,6 +106,7 @@ class SetReply:
             item = yield from f
             print(item)
     """
+
     def __init__(self, multibulk_reply):
         self._result = multibulk_reply
 
@@ -118,7 +121,7 @@ class SetReply:
         return set(data)
 
     def __repr__(self):
-        return 'SetReply(length=%r)' % (self._result.count)
+        return "SetReply(length=%r)" % (self._result.count)
 
 
 class ListReply:
@@ -134,6 +137,7 @@ class ListReply:
             item = yield from f
             print(item)
     """
+
     def __init__(self, multibulk_reply):
         self._result = multibulk_reply
 
@@ -148,7 +152,7 @@ class ListReply:
         return data
 
     def __repr__(self):
-        return 'ListReply(length=%r)' % (self._result.count, )
+        return "ListReply(length=%r)" % (self._result.count,)
 
 
 class BlockingPopReply:
@@ -156,6 +160,7 @@ class BlockingPopReply:
     :func:`~asyncio_redis.RedisProtocol.blpop` or
     :func:`~asyncio_redis.RedisProtocol.brpop` reply
     """
+
     def __init__(self, list_name, value):
         self._list_name = list_name
         self._value = value
@@ -171,7 +176,7 @@ class BlockingPopReply:
         return self._value
 
     def __repr__(self):
-        return 'BlockingPopReply(list_name=%r, value=%r)' % (self.list_name, self.value)
+        return "BlockingPopReply(list_name=%r, value=%r)" % (self.list_name, self.value)
 
 
 class BlockingZPopReply:
@@ -179,6 +184,7 @@ class BlockingZPopReply:
     :func:`~asyncio_redis.RedisProtocol.bzpopmin` or
     :func:`~asyncio_redis.RedisProtocol.bzpopmax` reply
     """
+
     def __init__(self, list_name, value, score):
         self._list_name = list_name
         self._value = value
@@ -199,13 +205,17 @@ class BlockingZPopReply:
         """ Score of value """
         return self._score
 
-
     def __repr__(self):
-        return 'BlockingZPopReply(list_name=%r, value=%r, score=%r)' % (self.list_name, self.value, self.score)
+        return "BlockingZPopReply(list_name=%r, value=%r, score=%r)" % (
+            self.list_name,
+            self.value,
+            self.score,
+        )
 
 
 class ConfigPairReply:
     """ :func:`~asyncio_redis.RedisProtocol.config_get` reply. """
+
     def __init__(self, parameter, value):
         self._paramater = parameter
         self._value = value
@@ -221,23 +231,26 @@ class ConfigPairReply:
         return self._value
 
     def __repr__(self):
-        return 'ConfigPairReply(parameter=%r, value=%r)' % (self.parameter, self.value)
+        return "ConfigPairReply(parameter=%r, value=%r)" % (self.parameter, self.value)
 
 
 class InfoReply:
     """ :func:`~asyncio_redis.RedisProtocol.info` reply. """
+
     def __init__(self, data):
-        self._data = data # TODO: implement parser logic
+        self._data = data  # TODO: implement parser logic
 
 
 class ClientListReply:
     """ :func:`~asyncio_redis.RedisProtocol.client_list` reply. """
+
     def __init__(self, data):
-        self._data = data # TODO: implement parser logic
+        self._data = data  # TODO: implement parser logic
 
 
 class PubSubReply:
     """ Received pubsub message. """
+
     def __init__(self, channel, value, *, pattern=None):
         self._channel = channel
         self._value = value
@@ -259,12 +272,14 @@ class PubSubReply:
         return self._pattern
 
     def __repr__(self):
-        return 'PubSubReply(channel=%r, value=%r)' % (self.channel, self.value)
+        return "PubSubReply(channel=%r, value=%r)" % (self.channel, self.value)
 
     def __eq__(self, other):
-        return (self._channel == other._channel and
-                self._value == other._value and
-                self._pattern == other._pattern)
+        return (
+            self._channel == other._channel
+            and self._value == other._value
+            and self._pattern == other._pattern
+        )
 
 
 class EvalScriptReply:
@@ -274,6 +289,7 @@ class EvalScriptReply:
     Lua scripts can return strings/bytes (NativeType), but also ints, lists or
     even nested data structures.
     """
+
     def __init__(self, protocol, value):
         self._protocol = protocol
         self._value = value
@@ -307,4 +323,3 @@ class EvalScriptReply:
                 return obj
 
         return (yield from decode(self._value))
-

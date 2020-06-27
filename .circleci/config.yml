@@ -54,6 +54,32 @@ jobs:
           name: run lints
           command: ./s/lint
 
+  typecheck:
+    docker:
+      - image: python:3.7
+    steps:
+      - checkout
+      # https://circleci.com/docs/2.0/caching/
+      - restore_cache:
+          keys:
+            - asyncio-redis-v1-{{ checksum "poetry.lock" }}
+      - run:
+          name: install dependencies
+          command: |
+            # Use our new PATH so we can call poetry from bash
+            echo 'export PATH="$PATH":"$HOME"/.local/bin' >> $BASH_ENV
+            source $BASH_ENV
+            command -v poetry || python -m pip install --user poetry==0.12.12
+            poetry install
+      - save_cache:
+          paths:
+            - ./bot/.mypy_cache
+            - /root/.cache/
+          key: asyncio-redis-v1-{{ checksum "poetry.lock" }}
+      - run:
+          name: typecheck
+          command: ./s/typecheck
+
   shellcheck:
     docker:
       - image: ubuntu:18.04
@@ -78,3 +104,4 @@ workflows:
     jobs:
       - test
       - lint
+      - typecheck

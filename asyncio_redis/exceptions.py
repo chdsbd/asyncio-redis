@@ -1,13 +1,13 @@
 __all__ = (
-        'ConnectionLostError',
-        'Error',
-        'ErrorReply',
-        'NoAvailableConnectionsInPoolError',
-        'NoRunningScriptError',
-        'NotConnectedError',
-        'ScriptKilledError',
-        'TimeoutError',
-        'TransactionError',
+    "ConnectionLostError",
+    "Error",
+    "ErrorReply",
+    "NoAvailableConnectionsInPoolError",
+    "NoRunningScriptError",
+    "NotConnectedError",
+    "ScriptKilledError",
+    "TimeoutError",
+    "TransactionError",
 )
 
 
@@ -29,7 +29,8 @@ class TransactionError(Error):
 
 class NotConnectedError(Error):
     """ Protocol is not connected. """
-    def __init__(self, message='Not connected'):
+
+    def __init__(self, message="Not connected"):
         super().__init__(message)
 
 
@@ -42,6 +43,7 @@ class ConnectionLostError(NotConnectedError):
     Connection lost during query.
     (Special case of ``NotConnectedError``.)
     """
+
     def __init__(self, exc):
         self.exception = exc
 
@@ -50,6 +52,7 @@ class NoAvailableConnectionsInPoolError(NotConnectedError):
     """
     When the connection pool has no available connections.
     """
+
 
 class ScriptKilledError(Error):
     """ Script was killed during an evalsha call. """

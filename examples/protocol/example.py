@@ -3,23 +3,26 @@
 Simple example that sets a key, and retrieves it again.
 """
 import asyncio
+
 from asyncio_redis import RedisProtocol
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     loop = asyncio.get_event_loop()
 
     def run():
         # Create connection
-        transport, protocol = yield from loop.create_connection(RedisProtocol, 'localhost', 6379)
+        transport, protocol = yield from loop.create_connection(
+            RedisProtocol, "localhost", 6379
+        )
 
         # Set a key
-        yield from protocol.set('key', 'value')
+        yield from protocol.set("key", "value")
 
         # Retrieve a key
-        result = yield from protocol.get('key')
+        result = yield from protocol.get("key")
 
         # Print result
-        print ('Succeeded', result == 'value')
+        print("Succeeded", result == "value")
 
         transport.close()
 

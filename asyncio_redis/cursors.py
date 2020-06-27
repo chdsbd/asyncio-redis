@@ -1,12 +1,7 @@
 import asyncio
 from collections import deque
 
-__all__ = (
-    'Cursor',
-    'DictCursor',
-    'SetCursor',
-    'ZCursor',
-)
+__all__ = ("Cursor", "DictCursor", "SetCursor", "ZCursor")
 
 SCAN_COUNT_DEFAULT = 10
 
@@ -16,6 +11,7 @@ class Cursor:
     Cursor for walking through the results of a :func:`scan
     <asyncio_redis.RedisProtocol.scan>` query.
     """
+
     def __init__(self, name, scanfunc):
         self._queue = deque()
         self._cursor = 0
@@ -28,7 +24,7 @@ class Cursor:
         self.count = SCAN_COUNT_DEFAULT
 
     def __repr__(self):
-        return '<%s %s>' % (self.__class__.__name__, self._name)
+        return "<%s %s>" % (self.__class__.__name__, self._name)
 
     @asyncio.coroutine
     def _fetch_more(self):
@@ -78,6 +74,7 @@ class SetCursor(Cursor):
     Cursor for walking through the results of a :func:`sscan
     <asyncio_redis.RedisProtocol.sscan>` query.
     """
+
     @asyncio.coroutine
     def fetchall(self):
         result = yield from super().fetchall()
@@ -89,6 +86,7 @@ class DictCursor(Cursor):
     Cursor for walking through the results of a :func:`hscan
     <asyncio_redis.RedisProtocol.hscan>` query.
     """
+
     def _parse(self, key, value):
         return key, value
 
@@ -103,7 +101,7 @@ class DictCursor(Cursor):
 
         if key is not None:
             key, value = self._parse(key, value)
-            return { key: value }
+            return {key: value}
 
     @asyncio.coroutine
     def fetchall(self):
@@ -125,6 +123,7 @@ class ZCursor(DictCursor):
     Cursor for walking through the results of a :func:`zscan
     <asyncio_redis.RedisProtocol.zscan>` query.
     """
+
     def _parse(self, key, value):
         # Mapping { key: score_as_float }
         return key, float(value)

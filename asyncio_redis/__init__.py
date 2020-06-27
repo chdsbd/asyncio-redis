@@ -1,7 +1,7 @@
 """
 Redis protocol implementation for asyncio (PEP 3156)
 """
-from .connection import *
-from .exceptions import *
-from .pool import *
-from .protocol import *
+from .connection import *  # noqa
+from .exceptions import *  # noqa
+from .pool import *  # noqa
+from .protocol import *  # noqa

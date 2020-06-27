@@ -10,8 +10,5 @@ else
     poetry run isort -y
 fi
 
-# type check code
-poetry run mypy .
-
 # lint
 poetry run flake8 asyncio_redis

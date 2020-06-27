@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 import asyncio
 import logging
+
 import asyncio_redis
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     loop = asyncio.get_event_loop()
 
     # Enable logging
@@ -12,17 +13,17 @@ if __name__ == '__main__':
 
     def run():
         # Create a new redis connection (this will also auto reconnect)
-        connection = yield from asyncio_redis.Connection.create('localhost', 6379)
+        connection = yield from asyncio_redis.Connection.create("localhost", 6379)
 
         try:
             # Subscribe to a channel.
             subscriber = yield from connection.start_subscribe()
-            yield from subscriber.subscribe([ 'our-channel' ])
+            yield from subscriber.subscribe(["our-channel"])
 
             # Print published values in a while/true loop.
             while True:
                 reply = yield from subscriber.next_published()
-                print('Received: ', repr(reply.value), 'on channel', reply.channel)
+                print("Received: ", repr(reply.value), "on channel", reply.channel)
 
         finally:
             connection.close()
