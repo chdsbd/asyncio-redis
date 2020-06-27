@@ -2,7 +2,6 @@
 
 from asyncio.futures import Future
 from asyncio.tasks import gather
-from test.test_asyncio.utils import run_briefly
 
 from asyncio_redis import (
         Connection,
@@ -59,6 +58,25 @@ try:
     ensure_future = asyncio.ensure_future
 except AttributeError:
     ensure_future = getattr(asyncio, "async")
+
+
+def run_briefly(loop):
+    """
+    from: https://github.com/python/cpython/blob/9cfcdb7d6e4d09bde63bc7116b2ab0d96724527e/Lib/test/test_asyncio/utils.py#L97-L108
+    """
+
+    async def once():
+        pass
+
+    gen = once()
+    t = loop.create_task(gen)
+    # Don't log a warning if the task is not done after run_until_complete().
+    # It occurs if the loop is stopped or if a task raises a BaseException.
+    t._log_destroy_pending = False
+    try:
+        loop.run_until_complete(t)
+    finally:
+        gen.close()
 
 
 @asyncio.coroutine
