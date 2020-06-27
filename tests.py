@@ -2,7 +2,7 @@
 
 from asyncio.futures import Future
 from asyncio.tasks import gather
-from asyncio.test_utils import run_briefly
+from test.test_asyncio.utils import run_briefly
 
 from asyncio_redis import (
         Connection,

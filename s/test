@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -ex
+
+poetry run python tests.py
