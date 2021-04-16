@@ -23,8 +23,7 @@ class Pool:
     """
 
     @classmethod
-    @asyncio.coroutine
-    def create(
+    async def create(
         cls,
         host="localhost",
         port=6379,
@@ -64,18 +63,22 @@ class Pool:
         self._poolsize = poolsize
 
         # Create connections
-        self._connections = yield from asyncio.gather(
-            Connection.create(
-                host=host,
-                port=port,
-                password=password,
-                db=db,
-                encoder=encoder,
-                auto_reconnect=auto_reconnect,
-                loop=loop,
-                protocol_class=protocol_class,
+        self._connections = list(
+            await asyncio.gather(
+                *[
+                    Connection.create(
+                        host=host,
+                        port=port,
+                        password=password,
+                        db=db,
+                        encoder=encoder,
+                        auto_reconnect=auto_reconnect,
+                        loop=loop,
+                        protocol_class=protocol_class,
+                    )
+                    for _ in range(poolsize)
+                ]
             )
-            for _ in range(poolsize)
         )
 
         return self
