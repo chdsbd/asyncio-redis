@@ -64,10 +64,8 @@ class Pool:
         self._poolsize = poolsize
 
         # Create connections
-        self._connections = []
-
-        for i in range(poolsize):
-            connection = yield from Connection.create(
+        self._connections = yield from asyncio.gather(
+            Connection.create(
                 host=host,
                 port=port,
                 password=password,
@@ -77,7 +75,8 @@ class Pool:
                 loop=loop,
                 protocol_class=protocol_class,
             )
-            self._connections.append(connection)
+            for _ in range(poolsize)
+        )
 
         return self
 
