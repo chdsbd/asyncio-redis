@@ -38,7 +38,8 @@ class Connection:
         encoder=None,
         auto_reconnect=True,
         loop=None,
-        protocol_class=RedisProtocol
+        protocol_class=RedisProtocol,
+        ssl=None
     ):
         """
         :param host: Address, either host or unix domain socket path
@@ -62,6 +63,7 @@ class Connection:
 
         connection.host = host
         connection.port = port
+        connection.ssl = ssl
         connection._loop = loop or asyncio.get_event_loop()
         connection._retry_interval = 0.5
         connection._closed = False
@@ -116,7 +118,7 @@ class Connection:
         logger.log(logging.INFO, "Connecting to redis")
         if self.port:
             yield from self._loop.create_connection(
-                lambda: self.protocol, self.host, self.port
+                lambda: self.protocol, self.host, self.port, ssl=self.ssl
             )
         else:
             yield from self._loop.create_unix_connection(

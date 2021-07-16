@@ -34,7 +34,8 @@ class Pool:
         poolsize=1,
         auto_reconnect=True,
         loop=None,
-        protocol_class=RedisProtocol
+        protocol_class=RedisProtocol,
+        ssl=None
     ):
         """
         Create a new connection pool instance.
@@ -75,6 +76,7 @@ class Pool:
                         auto_reconnect=auto_reconnect,
                         loop=loop,
                         protocol_class=protocol_class,
+                        ssl=ssl,
                     )
                     for _ in range(poolsize)
                 ]
