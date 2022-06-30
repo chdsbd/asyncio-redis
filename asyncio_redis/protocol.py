@@ -2980,7 +2980,7 @@ class Subscription:
 
     def __init__(self, protocol):
         self.protocol = protocol
-        self._messages_queue = Queue(loop=protocol._loop)  # Pubsub queue
+        self._messages_queue = Queue(**({loop: protocol._loop} if sys.version_info[:2] < (3, 8) else {}))  # Pubsub queue
 
     @wraps(RedisProtocol._subscribe)
     def subscribe(self, channels):
