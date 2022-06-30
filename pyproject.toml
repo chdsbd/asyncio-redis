@@ -5,7 +5,7 @@ description = ""
 authors = []
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.10"
 hiredis = {version = "^1.0",optional = true}
 
 [tool.poetry.dev-dependencies]

@@ -880,7 +880,7 @@ class RedisProtocol(asyncio.Protocol, metaclass=_RedisProtocolMeta):
         self._pubsub_patterns = set()  # Set of patterns
 
         # Transaction related stuff.
-        self._transaction_lock = asyncio.Lock(**({loop: loop} if sys.version_info[:2] < (3, 8) else {}))
+        self._transaction_lock = asyncio.Lock()
         self._transaction = None
         self._transaction_response_queue = None  # Transaction answer queue
 
@@ -2980,7 +2980,7 @@ class Subscription:
 
     def __init__(self, protocol):
         self.protocol = protocol
-        self._messages_queue = Queue(**({loop: protocol._loop} if sys.version_info[:2] < (3, 8) else {}))  # Pubsub queue
+        self._messages_queue = Queue()  # Pubsub queue
 
     @wraps(RedisProtocol._subscribe)
     def subscribe(self, channels):
