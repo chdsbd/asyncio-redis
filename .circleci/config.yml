@@ -3,7 +3,7 @@ version: 2
 jobs:
   test:
     docker:
-      - image: python:3.7
+      - image: python:3.10
       - image: circleci/redis:5.0
     steps:
       - checkout
@@ -17,7 +17,7 @@ jobs:
             # Use our new PATH so we can call poetry from bash
             echo 'export PATH="$PATH":"$HOME"/.local/bin' >> $BASH_ENV
             source $BASH_ENV
-            command -v poetry || python -m pip install --user poetry==0.12.12
+            command -v poetry || python -m pip install --user poetry==1.1.13
             poetry install
       - save_cache:
           paths:
@@ -30,7 +30,7 @@ jobs:
 
   lint:
     docker:
-      - image: python:3.7
+      - image: python:3.10
     steps:
       - checkout
       # https://circleci.com/docs/2.0/caching/
@@ -43,7 +43,7 @@ jobs:
             # Use our new PATH so we can call poetry from bash
             echo 'export PATH="$PATH":"$HOME"/.local/bin' >> $BASH_ENV
             source $BASH_ENV
-            command -v poetry || python -m pip install --user poetry==0.12.12
+            command -v poetry || python -m pip install --user poetry==1.1.13
             poetry install
       - save_cache:
           paths:
@@ -56,7 +56,7 @@ jobs:
 
   typecheck:
     docker:
-      - image: python:3.7
+      - image: python:3.10
     steps:
       - checkout
       # https://circleci.com/docs/2.0/caching/
@@ -69,7 +69,7 @@ jobs:
             # Use our new PATH so we can call poetry from bash
             echo 'export PATH="$PATH":"$HOME"/.local/bin' >> $BASH_ENV
             source $BASH_ENV
-            command -v poetry || python -m pip install --user poetry==0.12.12
+            command -v poetry || python -m pip install --user poetry==1.1.13
             poetry install
       - save_cache:
           paths:
