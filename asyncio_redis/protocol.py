@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import asyncio
 import logging
+import sys
 import types
 from asyncio.futures import Future
 from asyncio.queues import Queue
